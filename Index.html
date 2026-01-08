@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<body style="background: #333; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
+
+    <canvas id="artCanvas" width="500" height="500" style="background: white; image-rendering: pixelated;"></canvas>
+
+    <script>
+        const canvas = document.getElementById('artCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Let's pretend our art is 32x32 pixels, but we zoom in so we can see it
+        const pixelSize = 20; 
+        const gridSize = 25; // 25x25 grid
+
+        // 1. The Draw Function
+        function drawPixel(x, y) {
+            ctx.fillStyle = "black"; // The color of your pen
+            // Math to snap the mouse click to the nearest grid square
+            const snappedX = Math.floor(x / pixelSize) * pixelSize;
+            const snappedY = Math.floor(y / pixelSize) * pixelSize;
+            
+            ctx.fillRect(snappedX, snappedY, pixelSize, pixelSize);
+        }
+
+        // 2. Listening for the mouse
+        let isDrawing = false;
+
+        canvas.addEventListener('mousedown', () => isDrawing = true);
+        canvas.addEventListener('mouseup', () => isDrawing = false);
+        
+        canvas.addEventListener('mousemove', (e) => {
+            if (!isDrawing) return;
+            // Get mouse position relative to the canvas
+            const rect = canvas.getBoundingClientRect();
+            drawPixel(e.clientX - rect.left, e.clientY - rect.top);
+        });
+        
+        canvas.addEventListener('click', (e) => {
+             const rect = canvas.getBoundingClientRect();
+             drawPixel(e.clientX - rect.left, e.clientY - rect.top);
+        });
+
+    </script>
+</body>
+</html>
